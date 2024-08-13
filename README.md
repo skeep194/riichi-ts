@@ -2,7 +2,7 @@
 
 I use riichi-ts library at my project(https://github.com/skeep194/mahjong-vision-hybrid).
 
-but it's original version leak some feature of this.
+but it's original version lack of some feature of this.
 
 * reason of fu (implemented: false)
 * exported calculation type (implemented: true)
@@ -18,7 +18,7 @@ Small library to calculate hands and yaku for japanese (riichi) mahjong.
 
 ### Usage
 
-Install the library using `npm install riichi-ts` or `yarn add riichi-ts`.
+Install the library using `npm install @skeep194/riichi-ts` or `yarn add @skeep194/riichi-ts`.
 Type definitions for typescript are included in the package.
 
 #### Tiles definition
