@@ -4,13 +4,13 @@ I use riichi-ts library at my project(https://github.com/skeep194/mahjong-vision
 
 but it's original version leak some feature of this.
 
-* reason of fu
-* exported calculation type
-* when tsumo, should divide score to "oya, ko" or "ko ALL"(NOT summation)
+* reason of fu (implemented: false)
+* exported calculation type (implemented: true)
+* when tsumo, should divide score to "oya, ko" or "ko ALL"(NOT summation) (implemented: false)
 
 as I need, add this feature to fork version.
 
-**it's still in development, additional features are not implemented.**
+**it's still in development, some additional features are not implemented.**
 
 ## Riichi Typescript library
 
