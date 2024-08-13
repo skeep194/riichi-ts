@@ -3,7 +3,7 @@ import { hairi } from './shanten';
 import { YAKU } from './yaku';
 import { ceil10, ceil100, is19, isProperOpenSet } from './interfaces';
 
-type Options = {
+export type RiichiOptions = {
   dora?: number[];
   firstTake?: boolean; // tenhou/chihou/renhou
   riichi?: boolean;
@@ -15,7 +15,7 @@ type Options = {
   jikaze: number;
 };
 
-type Result = {
+export type RiichiResult = {
   isAgari: boolean;
   yakuman: number;
   yaku: Record<string, number>;
@@ -61,7 +61,7 @@ export class Riichi {
   public aka = 0;
   public agariPatterns: number[][][] = [];
   public currentPattern: number[][] | null = null;
-  public tmpResult: Result = {
+  public tmpResult: RiichiResult = {
     isAgari: false,
     yakuman: 0,
     yaku: {},
@@ -72,7 +72,7 @@ export class Riichi {
     text: '',
     error: true,
   };
-  public finalResult: Result | undefined;
+  public finalResult: RiichiResult | undefined;
   public allLocalEnabled = false;
   public localEnabled: string[] = [];
   public disabled: string[] = [];
@@ -85,7 +85,7 @@ export class Riichi {
   constructor(
     closedPart: number[],
     openPart: Array<{ open: boolean; tiles: number[] }>,
-    options: Options,
+    options: RiichiOptions,
     tileDiscardedBySomeone?: number,
     firstTake?: boolean,
     riichi?: boolean,
