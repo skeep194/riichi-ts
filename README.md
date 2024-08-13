@@ -1,3 +1,17 @@
+## skeep194 fork version
+
+I use riichi-ts library at my project(https://github.com/skeep194/mahjong-vision-hybrid).
+
+but it's original version leak some feature of this.
+
+* reason of fu
+* exported calculation type
+* when tsumo, should divide score to "oya, ko" or "ko ALL"(NOT summation)
+
+as I need, add this feature to fork version.
+
+**it's still in development, additional features are not implemented.**
+
 ## Riichi Typescript library
 
 Small library to calculate hands and yaku for japanese (riichi) mahjong.
