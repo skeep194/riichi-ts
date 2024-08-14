@@ -6,11 +6,9 @@ but it's original version lack of some feature of this.
 
 * reason of fu (implemented: true)
 * exported calculation type (implemented: true)
-* when tsumo, should divide score to "oya, ko" or "ko ALL"(NOT summation) (implemented: false)
+* when tsumo, should divide score to "oya, ko" or "ko ALL"(NOT summation) (implemented: true)
 
 as I need, add this feature to fork version.
-
-**it's still in development, some additional features are not implemented.**
 
 ## Riichi Typescript library
 
@@ -72,6 +70,7 @@ const result = hand.calc();
       han: 6,
       isAgari: true, // will be false if the hand is not winning
       ten: 12000, // amount of points won by the hand
+      tenTsumo: [3000, 6000], // when tsumo, gain score by [ko, oya]. if my wind is east(oya), output format is [ko]
       text: '', // additional info. Will contain 'no yaku' if the hand has no winning points 
       yaku: { // list of found yaku in the hand
        chinitsu: 5, // yaku name and amount of han for certain yaku

@@ -24,6 +24,7 @@ export type RiichiResult = {
   fu: number;
   fuReason: fu[];
   ten: number;
+  tenTsumo: number[];
   name: string;
   text: string;
   error: boolean;
@@ -71,6 +72,7 @@ export class Riichi {
     fu: 0,
     fuReason: [],
     ten: 0,
+    tenTsumo: [],
     name: '',
     text: '',
     error: true,
@@ -238,6 +240,11 @@ export class Riichi {
     if (this.isTsumo) {
       oya = ceil100(base * 2) + ceil100(base * 2) + ceil100(base * 2);
       ko = ceil100(base * 2) + ceil100(base) + ceil100(base);
+      if(this.jikaze === 27) {
+        this.tmpResult.tenTsumo = [ceil100(base * 2)];
+      } else {
+        this.tmpResult.tenTsumo = [ceil100(base), ceil100(base * 2)];
+      }
     } else {
       oya = ceil100(base * 6);
       ko = ceil100(base * 4);
