@@ -4,7 +4,7 @@ I use riichi-ts library at my project(https://github.com/skeep194/mahjong-vision
 
 but it's original version lack of some feature of this.
 
-* reason of fu (implemented: false)
+* reason of fu (implemented: true)
 * exported calculation type (implemented: true)
 * when tsumo, should divide score to "oya, ko" or "ko ALL"(NOT summation) (implemented: false)
 
@@ -68,6 +68,7 @@ const result = hand.calc();
     {
       error: false, // true if hand couldn't be parsed
       fu: 30,
+      fuReason: [{"name": "base", "score": 20}, {"name": "menzen ron", "score": 10}, {"name": "open triplet non simple", "score": 4}],
       han: 6,
       isAgari: true, // will be false if the hand is not winning
       ten: 12000, // amount of points won by the hand
@@ -149,6 +150,26 @@ const result = hand.calc();
 - dora
 - uradora
 - akadora
+
+### Full list of fu names that can be detected:
+- base
+- open pinfu
+- chiitoitsu
+- kokushimusou
+- pair wait
+- edge wait
+- closed wait
+- tsumo
+- menzen ron
+- open triplet simple
+- open triplet non simple
+- closed triplet simple
+- closed triplet non simple
+- open kan simple
+- open kan non simple
+- closed kan simple
+- closed kan non simple
+- yakuhai pair
 
 ### Credits
 

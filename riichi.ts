@@ -2,6 +2,7 @@ import { checkAll, findAllAgariPatterns } from './agari';
 import { hairi } from './shanten';
 import { YAKU } from './yaku';
 import { ceil10, ceil100, is19, isProperOpenSet } from './interfaces';
+import { FU, fu } from './fu';
 
 export type RiichiOptions = {
   dora?: number[];
@@ -21,6 +22,7 @@ export type RiichiResult = {
   yaku: Record<string, number>;
   han: number;
   fu: number;
+  fuReason: fu[];
   ten: number;
   name: string;
   text: string;
@@ -67,6 +69,7 @@ export class Riichi {
     yaku: {},
     han: 0,
     fu: 0,
+    fuReason: [],
     ten: 0,
     name: '',
     text: '',
@@ -244,16 +247,27 @@ export class Riichi {
 
   calcFu(haiExceptFuro: number[][], havePinfu = false) {
     let fu: number;
+    let fuReason: fu[] = [];
     if (this.tmpResult.yaku.chiitoitsu) {
       fu = 25;
+      fuReason.push(FU.chiitoitsu);
     } else if (this.tmpResult.yaku.kokushimusou || this.tmpResult.yaku['kokushimusou 13 sides']) {
       fu = 0;
+      fuReason.push(FU.kokushimusou);
     } else if (this.tmpResult.yaku.pinfu) {
-      fu = this.isTsumo ? 20 : 30;
+      fuReason.push(FU.base);
+      if (this.isTsumo) {
+        fu = 20;
+      } else {
+        fu = 30;
+        fuReason.push(FU.tsumo);
+      }
     } else {
       fu = 20;
+      fuReason.push(FU.base);
       if (!this.isTsumo && this.isMenzen()) {
         fu += 10;
+        fuReason.push(FU['menzen ron']);
       }
       if (!this.currentPattern) {
         return;
@@ -305,8 +319,26 @@ export class Riichi {
         if (v.length === 4) {
           // hack: count infinity sign to support closed kan of 1m
           fu += is19(Math.abs(v[0])) ? (1 / v[0] > 0 ? 16 : 32) : 1 / v[0] > 0 ? 8 : 16;
+          if (is19(Math.abs(v[0]))) {
+            if (1 / v[0] > 0) {
+              fuReason.push(FU['closed kan simple']);
+            } else {
+              fuReason.push(FU['closed kan non simple']);
+            }
+          } else {
+            if (1 / v[0] > 0) {
+              fuReason.push(FU['open kan simple']);
+            } else {
+              fuReason.push(FU['open kan non simple']);
+            }
+          }
         } else if (v.length === 3 && v[0] === v[1]) {
           fu += is19(v[0]) ? 4 : 2;
+          if (is19(v[0])) {
+            fuReason.push(FU['open triplet non simple']);
+          } else {
+            fuReason.push(FU['open triplet simple']);
+          }
         }
       }
 
@@ -315,46 +347,83 @@ export class Riichi {
           if ([this.bakaze, this.jikaze, 31, 32, 33].includes(v[0])) {
             // pair of yakuhai tile
             fu += 2;
+            fuReason.push(FU['yakuhai pair']);
           }
           if (this.bakaze === this.jikaze && this.bakaze === v[0]) {
             // pair of own wind which is also a seat wind
             fu += 2;
+            fuReason.push(FU['yakuhai pair']);
           }
           if (v[0] === this.takenTile) {
             fu += 2; // fu for tanki agari
+            fuReason.push(FU['pair wait']);
           }
         } else if (v.length === 3 && v[0] === v[1]) {
           if (!this.isTsumo && this.takenTile === v[0]) {
             if (canBeRyanmen || canBeKanchan || canBePenchan) {
               fu += is19(v[0]) ? 8 : 4;
+              if (is19(v[0])) {
+                fuReason.push(FU['closed triplet non simple']);
+              } else {
+                fuReason.push(FU['closed triplet simple']);
+              }
             } else {
+              // dual pair(shanpon) ron
               fu += is19(v[0]) ? 4 : 2;
+              if (is19(v[0])) {
+                fuReason.push(FU['open triplet non simple']);
+              } else {
+                fuReason.push(FU['open triplet simple']);
+              }
             }
           } else {
+            //dual pair(shanpon) tsumo
             fu += is19(v[0]) ? 8 : 4;
+            if (is19(v[0])) {
+              fuReason.push(FU['closed triplet non simple']);
+            } else {
+              fuReason.push(FU['closed triplet simple']);
+            }
           }
         }
       }
 
       if (canBePenchan || canBeKanchan) {
+        let check = false;
         if (!havePinfu && !canBeTanki) {
           fu += 2;
+          check = true;
         } else if (!canBeShanpon && !canBeRyanmen && !canBeTanki) {
           fu += 2;
+          check = true;
+        }
+        if(check) {
+          // assume that
+          // canBePenchan && canBeKanchan === false
+          // any counter-example exist?
+          if(canBePenchan) {
+            fuReason.push(FU['edge wait']);
+          } else {
+            fuReason.push(FU['closed wait']);
+          }
         }
       }
 
       if (this.isTsumo) {
         fu += 2;
+        fuReason.push(FU.tsumo);
       }
 
       fu = ceil10(fu);
       if (fu < 30) {
+        //maybe meld pinfu
         fu = 30;
+        fuReason.push(FU['open pinfu']);
       }
     }
 
     this.tmpResult.fu = fu;
+    this.tmpResult.fuReason = fuReason;
   }
 
   calcYaku() {
