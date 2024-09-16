@@ -240,7 +240,7 @@ export class Riichi {
     if (this.isTsumo) {
       oya = ceil100(base * 2) + ceil100(base * 2) + ceil100(base * 2);
       ko = ceil100(base * 2) + ceil100(base) + ceil100(base);
-      if(this.jikaze === 27) {
+      if (this.jikaze === 27) {
         this.tmpResult.tenTsumo = [ceil100(base * 2)];
       } else {
         this.tmpResult.tenTsumo = [ceil100(base), ceil100(base * 2)];
@@ -267,7 +267,7 @@ export class Riichi {
         fu = 20;
       } else {
         fu = 30;
-        fuReason.push(FU.tsumo);
+        fuReason.push(FU['menzen ron']);
       }
     } else {
       fu = 20;
@@ -404,11 +404,11 @@ export class Riichi {
           fu += 2;
           check = true;
         }
-        if(check) {
+        if (check) {
           // assume that
           // canBePenchan && canBeKanchan === false
           // any counter-example exist?
-          if(canBePenchan) {
+          if (canBePenchan) {
             fuReason.push(FU['edge wait']);
           } else {
             fuReason.push(FU['closed wait']);
